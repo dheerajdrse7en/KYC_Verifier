@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class KycService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://kyc-verifier-rzca.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 
