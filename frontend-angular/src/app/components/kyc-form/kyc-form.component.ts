@@ -78,13 +78,17 @@ export class KycFormComponent implements AfterViewInit, OnDestroy {
 
   captureImage() {
     const video = this.video.nativeElement;
+
+    // ✅ Resize for smaller image
     const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    canvas.width = 640;  // fixed smaller width
+    canvas.height = 480; // fixed smaller height
+
     const ctx = canvas.getContext('2d');
     if (ctx) {
-      ctx.drawImage(video, 0, 0);
-      const base64 = canvas.toDataURL('image/jpeg');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const base64 = canvas.toDataURL('image/jpeg', 0.7); // 0.7 = quality (optional)
+
       this.previewImage = base64;
       this.kyc.photoBase64 = base64;
     }
