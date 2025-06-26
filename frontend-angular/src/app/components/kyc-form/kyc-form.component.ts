@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { KycService } from '../../services/kyc.service';
@@ -10,9 +10,11 @@ import { KycService } from '../../services/kyc.service';
   templateUrl: './kyc-form.component.html',
   styleUrls: ['./kyc-form.component.css']
 })
-export class KycFormComponent implements AfterViewInit {
+export class KycFormComponent implements AfterViewInit, OnDestroy {
   @ViewChild('video', { static: false }) video!: ElementRef<HTMLVideoElement>;
   previewImage: string | null = null;
+  stream: MediaStream | null = null;
+  facingMode: 'user' | 'environment' = 'environment';
 
   kyc: any = {
     name: '',
@@ -43,12 +45,35 @@ export class KycFormComponent implements AfterViewInit {
   constructor(private kycService: KycService) {}
 
   ngAfterViewInit() {
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => {
-        const video = this.video.nativeElement;
-        video.srcObject = stream;
-      })
-      .catch(err => alert('Camera access denied: ' + err));
+    this.startCamera();
+  }
+
+  startCamera() {
+    if (this.stream) {
+      this.stopCamera();
+    }
+
+    navigator.mediaDevices.getUserMedia({
+      video: { facingMode: this.facingMode },
+      audio: false
+    })
+    .then(stream => {
+      this.stream = stream;
+      const video = this.video.nativeElement;
+      video.srcObject = stream;
+      video.play();
+    })
+    .catch(err => alert('Camera access denied: ' + err));
+  }
+
+  stopCamera() {
+    this.stream?.getTracks().forEach(track => track.stop());
+    this.stream = null;
+  }
+
+  switchCamera() {
+    this.facingMode = this.facingMode === 'user' ? 'environment' : 'user';
+    this.startCamera();
   }
 
   captureImage() {
@@ -95,6 +120,7 @@ export class KycFormComponent implements AfterViewInit {
     };
     this.previewImage = null;
   }
+
   downloadExcel(): void {
     this.kycService.exportKYC().subscribe(blob => {
       const a = document.createElement('a');
@@ -104,5 +130,9 @@ export class KycFormComponent implements AfterViewInit {
       a.click();
       URL.revokeObjectURL(objectUrl);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.stopCamera();
   }
 }
