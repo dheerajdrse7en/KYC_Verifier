@@ -1,7 +1,8 @@
-<div class="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg animate-fade-in">
+<div class="max-w-3xl mx-auto p-6 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-lg rounded-lg animate-fade-in">
   <h2 class="text-3xl font-bold mb-6 text-center">Mutual Fund Investment KYC</h2>
 
   <form (ngSubmit)="submitForm()" #kycForm="ngForm" class="space-y-6">
+
     <!-- Personal Details -->
     <section>
       <h3 class="text-xl font-semibold mb-2">Personal Details</h3>
@@ -62,26 +63,30 @@
       <label class="block font-semibold">Document Capture:</label>
       <video #video autoplay playsinline muted class="w-full mt-2 border rounded-md"></video>
       <div class="flex gap-2 mt-2">
-        <button type="button" (click)="captureImage()" class="btn-blue">📷 Capture</button>
-        <button type="button" (click)="switchCamera()" class="btn-yellow">🔄 Switch Camera</button>
+        <button type="button" (click)="captureImage()" class="btn-blue">Capture</button>
+        <button type="button" (click)="switchCamera()" class="btn-yellow">Switch Camera</button>
       </div>
     </section>
 
-    <!-- View Link -->
-    <div *ngIf="previewImage && !showPreview" class="mt-4">
-      <p class="text-blue-600 underline cursor-pointer" (click)="togglePreview()">🔍 View {{ capturedImageName }}</p>
+    <!-- Captured Image Toggle -->
+    <div *ngIf="previewImage && !showPreview" class="mt-4 preview-toggle" (click)="togglePreview()">
+      View Captured Image
     </div>
 
-    <!-- Preview Image -->
+    <!-- Preview Image Container -->
     <div *ngIf="showPreview" class="mt-4">
-      <img [src]="previewImage" class="w-full border rounded-md" />
-      <p class="text-sm text-gray-600 mt-1 cursor-pointer underline" (click)="togglePreview()">🔙 Hide Preview</p>
+      <div class="preview-container dark:bg-white/10">
+        <img [src]="previewImage" class="preview-image" />
+        <p class="text-center text-sm text-blue-600 underline mt-2 cursor-pointer" (click)="togglePreview()">
+          Hide Preview
+        </p>
+      </div>
     </div>
 
     <!-- Actions -->
     <div class="flex gap-4 justify-center mt-6">
-      <button type="submit" class="btn-green">✅ Submit</button>
-      <button (click)="downloadExcel()" class="btn btn-primary">Export to Excel</button>
+      <button type="submit" class="btn-green">Submit</button>
+      <button type="button" (click)="downloadExcel()" class="btn btn-primary">Export to Excel</button>
     </div>
   </form>
 </div>

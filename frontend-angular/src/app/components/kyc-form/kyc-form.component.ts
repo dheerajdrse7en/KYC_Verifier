@@ -16,13 +16,26 @@ export class KycFormComponent implements AfterViewInit, OnDestroy {
   stream: MediaStream | null = null;
   facingMode: 'user' | 'environment' = 'environment';
   showPreview = false;
-  capturedImageName = 'captured_document.jpg';
 
   kyc: any = {
-    name: '', pan: '', dob: '', gender: '', mobile: '', email: '',
-    address: '', city: '', state: '', pincode: '',
-    accountHolder: '', accountNumber: '', ifsc: '', bankName: '',
-    fund: '', amount: '', investmentType: '', startDate: '',
+    name: '',
+    pan: '',
+    dob: '',
+    gender: '',
+    mobile: '',
+    email: '',
+    address: '',
+    city: '',
+    state: '',
+    pincode: '',
+    accountHolder: '',
+    accountNumber: '',
+    ifsc: '',
+    bankName: '',
+    fund: '',
+    amount: '',
+    investmentType: '',
+    startDate: '',
     photoBase64: ''
   };
 
@@ -33,10 +46,13 @@ export class KycFormComponent implements AfterViewInit, OnDestroy {
   }
 
   startCamera() {
-    if (this.stream) this.stopCamera();
+    if (this.stream) {
+      this.stopCamera();
+    }
 
     navigator.mediaDevices.getUserMedia({
-      video: { facingMode: this.facingMode }, audio: false
+      video: { facingMode: this.facingMode },
+      audio: false
     }).then(stream => {
       this.stream = stream;
       const video = this.video.nativeElement;
@@ -64,11 +80,14 @@ export class KycFormComponent implements AfterViewInit, OnDestroy {
     const ctx = canvas.getContext('2d');
     if (ctx) {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const base64 = canvas.toDataURL('image/jpeg', 0.9);
+      const base64 = canvas.toDataURL('image/jpeg', 0.8);
 
-      const sizeInMB = (base64.length * (3 / 4)) / (1024 * 1024);
+      // Check size before setting
+      const sizeInBytes = (base64.length * (3 / 4)) - (base64.endsWith('==') ? 2 : base64.endsWith('=') ? 1 : 0);
+      const sizeInMB = sizeInBytes / (1024 * 1024);
+
       if (sizeInMB > 5) {
-        alert('❌ Captured image is too large (max 5MB). Please move the camera back slightly or retake.');
+        alert('Captured image exceeds 5MB. Try capturing a lower resolution.');
         return;
       }
 
@@ -92,16 +111,6 @@ export class KycFormComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  exportExcel() {
-    this.kycService.exportKYC().subscribe(blob => {
-      const a = document.createElement('a');
-      const url = window.URL.createObjectURL(blob);
-      a.href = url;
-      a.download = 'kyc-data.xlsx';
-      a.click();
-    });
-  }
-
   resetForm() {
     this.kyc = {
       name: '', pan: '', dob: '', gender: '', mobile: '', email: '',
@@ -117,11 +126,11 @@ export class KycFormComponent implements AfterViewInit, OnDestroy {
   downloadExcel(): void {
     this.kycService.exportKYC().subscribe(blob => {
       const a = document.createElement('a');
-      const objectUrl = URL.createObjectURL(blob);
-      a.href = objectUrl;
+      const url = window.URL.createObjectURL(blob);
+      a.href = url;
       a.download = 'kyc-data.xlsx';
       a.click();
-      URL.revokeObjectURL(objectUrl);
+      URL.revokeObjectURL(url);
     });
   }
 
