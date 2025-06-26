@@ -2,62 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Reusable input styling */
+/* Input styling */
 .input-field {
   @apply w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white dark:bg-gray-800 text-black dark:text-white transition;
 }
 
-/* Button Styles */
+/* Buttons */
 .btn-blue {
-  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition;
+  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition shadow;
 }
-
 .btn-green {
-  @apply bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition;
+  @apply bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition shadow;
 }
-
 .btn-yellow {
-  @apply bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition;
+  @apply bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition shadow;
+}
+.btn-preview-toggle {
+  @apply w-full text-center bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 border-2 border-blue-500 px-6 py-3 rounded-md hover:bg-blue-200 dark:hover:bg-blue-800 transition font-medium shadow;
 }
 
-/* Fade-in animation */
+
+/* Preview toggle styled like button */
+.preview-toggle {
+  @apply w-full cursor-pointer border-2 border-blue-500 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-6 py-3 rounded-md text-center hover:bg-blue-200 dark:hover:bg-blue-800 transition font-medium shadow;
+}
+
+/* Captured image preview container */
+.preview-container {
+  @apply border border-blue-400 bg-blue-100 dark:bg-blue-900/30 p-4 rounded-md shadow-md w-full;
+}
+
+.preview-image {
+  @apply w-full rounded-md shadow-lg;
+}
+
+/* Fade-in effect */
 .animate-fade-in {
   animation: fadeIn 0.6s ease-in-out;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Mobile tweaks */
+/* Mobile responsiveness */
 @media (max-width: 640px) {
-  .input-field {
-    @apply text-sm;
-  }
-
-  .btn-blue,
-  .btn-green,
-  .btn-yellow {
-    @apply text-sm;
-  }
+  .input-field { @apply text-sm; }
+  .btn-blue, .btn-green, .btn-yellow { @apply text-sm; }
 }
 
-/* Custom preview UI */
-.preview-toggle {
-  @apply cursor-pointer border border-blue-400 text-blue-600 px-4 py-2 rounded-xl text-center hover:bg-blue-50 dark:hover:bg-gray-700 transition;
-}
-
-.preview-container {
-  @apply p-4 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-100 bg-opacity-30 backdrop-blur-md shadow-md transition;
-}
-
-.preview-image {
-  @apply w-full rounded-xl shadow-lg;
+/* Smooth dark mode toggle */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
