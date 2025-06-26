@@ -6,7 +6,11 @@ const kycRoutes = require('./routes/kycRoutes');
 const app = express();
 const PORT = 3000;
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://kycdocupload.netlify.app',
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
 app.use(express.json());
 
 mongoose.connect('mongodb://127.0.0.1:27017/mutualfundkyc')
