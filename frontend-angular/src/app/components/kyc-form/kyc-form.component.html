@@ -2,7 +2,6 @@
   <h2 class="text-3xl font-bold mb-6 text-center">Mutual Fund Investment KYC</h2>
 
   <form (ngSubmit)="submitForm()" #kycForm="ngForm" class="space-y-6">
-
     <!-- Personal Details -->
     <section>
       <h3 class="text-xl font-semibold mb-2">Personal Details</h3>
@@ -68,9 +67,15 @@
       </div>
     </section>
 
-    <!-- Preview -->
-    <div *ngIf="previewImage" class="mt-4">
+    <!-- View Link -->
+    <div *ngIf="previewImage && !showPreview" class="mt-4">
+      <p class="text-blue-600 underline cursor-pointer" (click)="togglePreview()">🔍 View {{ capturedImageName }}</p>
+    </div>
+
+    <!-- Preview Image -->
+    <div *ngIf="showPreview" class="mt-4">
       <img [src]="previewImage" class="w-full border rounded-md" />
+      <p class="text-sm text-gray-600 mt-1 cursor-pointer underline" (click)="togglePreview()">🔙 Hide Preview</p>
     </div>
 
     <!-- Actions -->

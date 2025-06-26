@@ -15,30 +15,14 @@ export class KycFormComponent implements AfterViewInit, OnDestroy {
   previewImage: string | null = null;
   stream: MediaStream | null = null;
   facingMode: 'user' | 'environment' = 'environment';
+  showPreview = false;
+  capturedImageName = 'captured_document.jpg';
 
   kyc: any = {
-    name: '',
-    pan: '',
-    dob: '',
-    gender: '',
-    mobile: '',
-    email: '',
-
-    address: '',
-    city: '',
-    state: '',
-    pincode: '',
-
-    accountHolder: '',
-    accountNumber: '',
-    ifsc: '',
-    bankName: '',
-
-    fund: '',
-    amount: '',
-    investmentType: '',
-    startDate: '',
-
+    name: '', pan: '', dob: '', gender: '', mobile: '', email: '',
+    address: '', city: '', state: '', pincode: '',
+    accountHolder: '', accountNumber: '', ifsc: '', bankName: '',
+    fund: '', amount: '', investmentType: '', startDate: '',
     photoBase64: ''
   };
 
@@ -49,21 +33,16 @@ export class KycFormComponent implements AfterViewInit, OnDestroy {
   }
 
   startCamera() {
-    if (this.stream) {
-      this.stopCamera();
-    }
+    if (this.stream) this.stopCamera();
 
     navigator.mediaDevices.getUserMedia({
-      video: { facingMode: this.facingMode },
-      audio: false
-    })
-    .then(stream => {
+      video: { facingMode: this.facingMode }, audio: false
+    }).then(stream => {
       this.stream = stream;
       const video = this.video.nativeElement;
       video.srcObject = stream;
       video.play();
-    })
-    .catch(err => alert('Camera access denied: ' + err));
+    }).catch(err => alert('Camera access denied: ' + err));
   }
 
   stopCamera() {
@@ -78,20 +57,29 @@ export class KycFormComponent implements AfterViewInit, OnDestroy {
 
   captureImage() {
     const video = this.video.nativeElement;
-
-    // ✅ Resize for smaller image
     const canvas = document.createElement('canvas');
-    canvas.width = 640;  // fixed smaller width
-    canvas.height = 480; // fixed smaller height
+    canvas.width = 640;
+    canvas.height = 480;
 
     const ctx = canvas.getContext('2d');
     if (ctx) {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const base64 = canvas.toDataURL('image/jpeg', 0.7); // 0.7 = quality (optional)
+      const base64 = canvas.toDataURL('image/jpeg', 0.9);
+
+      const sizeInMB = (base64.length * (3 / 4)) / (1024 * 1024);
+      if (sizeInMB > 5) {
+        alert('❌ Captured image is too large (max 5MB). Please move the camera back slightly or retake.');
+        return;
+      }
 
       this.previewImage = base64;
       this.kyc.photoBase64 = base64;
+      this.showPreview = false;
     }
+  }
+
+  togglePreview() {
+    this.showPreview = !this.showPreview;
   }
 
   submitForm() {
@@ -123,6 +111,7 @@ export class KycFormComponent implements AfterViewInit, OnDestroy {
       photoBase64: ''
     };
     this.previewImage = null;
+    this.showPreview = false;
   }
 
   downloadExcel(): void {
