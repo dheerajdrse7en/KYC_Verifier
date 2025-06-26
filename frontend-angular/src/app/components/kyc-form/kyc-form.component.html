@@ -1,0 +1,79 @@
+<div class="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg animate-fade-in">
+  <h2 class="text-3xl font-bold mb-6 text-center">Mutual Fund Investment KYC</h2>
+
+  <form (ngSubmit)="submitForm()" #kycForm="ngForm" class="space-y-6">
+
+    <!-- Personal Details -->
+    <section>
+      <h3 class="text-xl font-semibold mb-2">Personal Details</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input class="input-field" type="text" name="name" placeholder="Full Name" [(ngModel)]="kyc.name" required />
+        <input class="input-field" type="text" name="pan" placeholder="PAN" [(ngModel)]="kyc.pan" required />
+        <input class="input-field" type="date" name="dob" placeholder="DOB" [(ngModel)]="kyc.dob" required />
+        <select class="input-field" name="gender" [(ngModel)]="kyc.gender" required>
+          <option value="" disabled selected>Select Gender</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+        <input class="input-field" type="tel" name="mobile" placeholder="Mobile" [(ngModel)]="kyc.mobile" required />
+        <input class="input-field" type="email" name="email" placeholder="Email" [(ngModel)]="kyc.email" required />
+      </div>
+    </section>
+
+    <!-- Address -->
+    <section>
+      <h3 class="text-xl font-semibold mb-2">Address</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input class="input-field" type="text" name="address" placeholder="Address Line" [(ngModel)]="kyc.address" required />
+        <input class="input-field" type="text" name="city" placeholder="City" [(ngModel)]="kyc.city" required />
+        <input class="input-field" type="text" name="state" placeholder="State" [(ngModel)]="kyc.state" required />
+        <input class="input-field" type="text" name="pincode" placeholder="Pincode" [(ngModel)]="kyc.pincode" required />
+      </div>
+    </section>
+
+    <!-- Bank Details -->
+    <section>
+      <h3 class="text-xl font-semibold mb-2">Bank Details</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input class="input-field" type="text" name="accountHolder" placeholder="Account Holder Name" [(ngModel)]="kyc.accountHolder" required />
+        <input class="input-field" type="text" name="accountNumber" placeholder="Account Number" [(ngModel)]="kyc.accountNumber" required />
+        <input class="input-field" type="text" name="ifsc" placeholder="IFSC Code" [(ngModel)]="kyc.ifsc" required />
+        <input class="input-field" type="text" name="bankName" placeholder="Bank Name" [(ngModel)]="kyc.bankName" required />
+      </div>
+    </section>
+
+    <!-- Investment -->
+    <section>
+      <h3 class="text-xl font-semibold mb-2">Investment Details</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input class="input-field" type="text" name="fund" placeholder="Fund Name" [(ngModel)]="kyc.fund" required />
+        <input class="input-field" type="number" name="amount" placeholder="Amount" [(ngModel)]="kyc.amount" required />
+        <select class="input-field" name="type" [(ngModel)]="kyc.investmentType" required>
+          <option value="" disabled selected>Type</option>
+          <option>SIP</option>
+          <option>Lump Sum</option>
+        </select>
+        <input class="input-field" type="date" name="startDate" placeholder="Start Date" [(ngModel)]="kyc.startDate" required />
+      </div>
+    </section>
+
+    <!-- Camera -->
+    <section class="mt-4">
+      <label class="block font-semibold">Document Capture:</label>
+      <video #video autoplay class="w-full mt-2 border rounded-md"></video>
+      <button type="button" (click)="captureImage()" class="btn-blue mt-2">📷 Capture</button>
+    </section>
+
+    <!-- Preview -->
+    <div *ngIf="previewImage" class="mt-4">
+      <img [src]="previewImage" class="w-full border rounded-md" />
+    </div>
+
+    <!-- Actions -->
+    <div class="flex gap-4 justify-center mt-6">
+      <button type="submit" class="btn-green">✅ Submit</button>
+      <button (click)="downloadExcel()" class="btn btn-primary">Export to Excel</button>
+    </div>
+  </form>
+</div>
