@@ -13,7 +13,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-mongoose.connect('mongodb://127.0.0.1:27017/mutualfundkyc')
+mongoose.connect('mongodb+srv://Dheeraj:Ronaldocr7@cluster0.bcyxe0y.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
